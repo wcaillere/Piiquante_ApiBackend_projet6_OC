@@ -5,7 +5,7 @@ exports.signup = (req, res, next) => {
     bcrypt.hash(req.body.password, 10)
     .then(hash => {
         const user = new User({
-            email: req.body.email,
+            email: req.body.email.toLowerCase(),
             password: hash
         });    
         user.save()
@@ -16,7 +16,7 @@ exports.signup = (req, res, next) => {
 }
 
 exports.login = (req, res, next) => {
-    User.findOne({email: req.body.email})
+    User.findOne({email: req.body.email.toLowerCase()})
     .then(user => {
         if (user == null) {
             res.status(401).json({message: "Paire email/mot de passe invalide !"})
