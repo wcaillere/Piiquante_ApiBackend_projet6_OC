@@ -1,8 +1,10 @@
+//import packages
 const express = require('express');
 const mongoose = require('mongoose');
 require('dotenv').config();
 
-const authRoutes = require('./routes/auth')
+//import Routers
+const userRoutes = require('./routes/user')
 const saucesRoutes = require('./routes/sauces')
 
 //Connexion to the DB mongoDB
@@ -10,7 +12,9 @@ mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD
 .then(() => console.log('Connexion à MongoDB réussie !'))
 .catch(() => console.log('Connexion à MongoDB échouée !'));
 
+//create and configure express app
 const app = express();
+app.use(express.json());
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -19,9 +23,8 @@ app.use((req, res, next) => {
     next();
   });
 
-app.use(express.json());
-
-app.use('/api/auth', authRoutes);
+//Routes
+app.use('/api/auth', userRoutes);
 app.use('/api/sauces', saucesRoutes);
 
 module.exports = app;
