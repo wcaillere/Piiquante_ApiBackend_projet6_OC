@@ -6,6 +6,8 @@ const router = express.Router();
 
 router.get('/', auth, sauceCtrl.getAllSauces);
 
+router.get('/:id', auth, sauceCtrl.getOneSauce);
+
 router.post('/', auth, multer, sauceCtrl.createOneSauce);
 
 module.exports = router;
