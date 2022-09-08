@@ -10,4 +10,6 @@ router.get('/:id', auth, sauceCtrl.getOneSauce);
 
 router.post('/', auth, multer, sauceCtrl.createOneSauce);
 
+router.put('/:id', auth, multer, sauceCtrl.modifyOneSauce);
+
 module.exports = router;
