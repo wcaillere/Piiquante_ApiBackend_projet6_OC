@@ -12,4 +12,6 @@ router.post('/', auth, multer, sauceCtrl.createOneSauce);
 
 router.put('/:id', auth, multer, sauceCtrl.modifyOneSauce);
 
+router.delete('/:id', auth, sauceCtrl.deleteOneSauce)
+
 module.exports = router;
