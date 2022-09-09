@@ -61,3 +61,46 @@ exports.deleteOneSauce = (req, res, next) => {
     })
     .catch(error => res.status(500).json({error}))
 }
+
+exports.manageLike = (req, res, next) => {
+    Sauce.findOne({_id: req.params.id})
+    .then(sauce => {
+        if (req.body.like == 1) {
+            let tableau = sauce.usersLiked;
+            tableau.push(req.body.userId);
+            Sauce.updateOne({ _id: req.params.id}, {likes: sauce.likes + 1, usersLiked: tableau})
+            .then(() => res.status(200).json({message: "Le like/dislike de ka sauce a bien été pris en compte !"}))
+            .catch(error => res.status(500).json({error}))
+        }
+        else if (req.body.like == -1) {
+            let dislikesArray = sauce.usersDisliked;
+            dislikesArray.push(req.body.userId);
+            Sauce.updateOne({ _id: req.params.id}, {$set: {dislikes: sauce.dislikes + 1, usersDisliked: dislikesArray}})
+            .then(() => res.status(200).json({message: "Le like/dislike de ka sauce a bien été pris en compte !"}))
+            .catch(error => res.status(500).json({error}))
+        }
+        else if (req.body.like == 0) {
+            if (sauce.usersLiked.includes(req.body.userId)) {
+                let tableau = sauce.usersLiked;
+                let index = tableau.indexOf(req.body.userId)
+                tableau.splice(index, 1);
+                console.log(tableau);
+                Sauce.updateOne({ _id: req.params.id}, {likes: sauce.likes - 1, usersLiked: tableau})
+                .then(() => res.status(200).json({message: "Le like/dislike de ka sauce a bien été pris en compte !"}))
+                .catch(error => res.status(500).json({error}))
+            } else if (sauce.usersDisliked.includes(req.body.userId)) {
+                let dislikesArray = sauce.usersDisliked;
+                let index = dislikesArray.indexOf(req.body.userId)
+                dislikesArray.splice(index, 1);
+                console.log(dislikesArray);
+                Sauce.updateOne({ _id: req.params.id}, {dislikes: sauce.dislikes - 1, usersDisliked: dislikesArray})
+                .then(() => res.status(200).json({message: "Le like/dislike de ka sauce a bien été pris en compte !"}))
+                .catch(error => res.status(500).json({error}))
+            }
+        }
+    })
+    .catch(error => {
+        res.status(500).json({error});
+        console.log(error)
+    })
+}
