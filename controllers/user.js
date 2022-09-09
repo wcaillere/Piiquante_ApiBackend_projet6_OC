@@ -1,7 +1,9 @@
+//import packages
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
+//Allows an user to signup on the site if he's not
 exports.signup = (req, res, next) => {
     bcrypt.hash(req.body.password, 10)
     .then(hash => {
@@ -16,6 +18,7 @@ exports.signup = (req, res, next) => {
     .catch(error => res.status(500).json({error}));
 }
 
+//Allows an user to login on the site if he's in the Data Base
 exports.login = (req, res, next) => {
     User.findOne({email: req.body.email.toLowerCase()})
     .then(user => {
