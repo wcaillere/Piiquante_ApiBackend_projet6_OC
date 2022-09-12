@@ -74,17 +74,13 @@ exports.manageLike = (req, res, next) => {
     .then(sauce => {
         //like == 1 : an user is liking a sauce
         if (req.body.like == 1) {
-            let addLikeArray = sauce.usersLiked;
-            addLikeArray.push(req.body.userId);
-            Sauce.updateOne({ _id: req.params.id}, {likes: sauce.likes + 1, usersLiked: addLikeArray})
+            Sauce.updateOne({ _id: req.params.id}, {likes: sauce.likes + 1, $push: {usersLiked: req.body.userId}})
             .then(() => res.status(200).json({message: "Sauce likée !"}))
             .catch(error => res.status(500).json({error}))
         }
         //like == -1 : an user is disliking a sauce
         else if (req.body.like == -1) {
-            let addDislikeArray = sauce.usersDisliked;
-            addDislikeArray.push(req.body.userId);
-            Sauce.updateOne({ _id: req.params.id}, {$set: {dislikes: sauce.dislikes + 1, usersDisliked: addDislikeArray}})
+            Sauce.updateOne({ _id: req.params.id}, {dislikes: sauce.dislikes + 1, $push: {usersDisliked: req.body.userId}})
             .then(() => res.status(200).json({message: "Sauce dislikée !"}))
             .catch(error => res.status(500).json({error}))
         }
@@ -92,19 +88,13 @@ exports.manageLike = (req, res, next) => {
         else if (req.body.like == 0) {
             //if the action is to remove a like
             if (sauce.usersLiked.includes(req.body.userId)) {
-                let removeLikeArray = sauce.usersLiked;
-                let index = removeLikeArray.indexOf(req.body.userId)
-                removeLikeArray.splice(index, 1);
-                Sauce.updateOne({ _id: req.params.id}, {likes: sauce.likes - 1, usersLiked: removeLikeArray})
+                Sauce.updateOne({ _id: req.params.id}, {likes: sauce.likes - 1, $pullAll: {usersLiked: [req.body.userId]}})
                 .then(() => res.status(200).json({message: "Like retiré !"}))
                 .catch(error => res.status(500).json({error}))
             } 
             //if the action is to remove a dislike
             else if (sauce.usersDisliked.includes(req.body.userId)) {
-                let removeDislikeArray = sauce.usersDisliked;
-                let index = removeDislikeArray.indexOf(req.body.userId)
-                removeDislikeArray.splice(index, 1);
-                Sauce.updateOne({ _id: req.params.id}, {dislikes: sauce.dislikes - 1, usersDisliked: removeDislikeArray})
+                Sauce.updateOne({ _id: req.params.id}, {dislikes: sauce.dislikes - 1, $pullAll: {usersDisliked: [req.body.userId]}})
                 .then(() => res.status(200).json({message: "Dislike retiré !"}))
                 .catch(error => res.status(500).json({error}))
             }
