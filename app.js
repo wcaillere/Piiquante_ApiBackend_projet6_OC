@@ -2,6 +2,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const helmet = require('helmet');
 const path = require('path');
 require('dotenv').config();
 
@@ -21,6 +22,7 @@ mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD
 const app = express();
 app.use(express.json());
 app.use(cors());
+app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 
 //Routes
 app.use('/api/auth', userRoutes);
