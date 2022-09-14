@@ -42,6 +42,11 @@ exports.modifyOneSauce = (req, res, next) => {
         if (sauce.userId != req.auth.userId) {
             res.status(403).json({message: 'Unauthorized request'})
         } else {
+            //if the image has been changed, the previous image is deleted
+            if (req.file) {
+                const filename = sauce.imageUrl.split('/images/')[1];
+                fs.unlink(`images/${filename}`, () => {});
+            }
             Sauce.updateOne({ _id: req.params.id}, {...sauceObject, _id: req.params.id})
             .then(() => res.status(200).json({message: "Sauce modifiée !"}))
             .catch(error => res.status(401).json({error}))
