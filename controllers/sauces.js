@@ -111,7 +111,7 @@ exports.manageLike = (req, res, next) => {
             }
         }
         else {
-            res.status(400).json({error});
+            res.status(400).json({message: "Invalid request"});
         }
     })
     .catch(error => res.status(500).json({error}))
