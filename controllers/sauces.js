@@ -74,27 +74,27 @@ exports.manageLike = (req, res, next) => {
     .then(sauce => {
         //like == 1 : an user is liking a sauce
         if (req.body.like == 1) {
-            Sauce.updateOne({ _id: req.params.id}, {likes: sauce.likes + 1, $push: {usersLiked: req.body.userId}})
+            Sauce.updateOne({ _id: req.params.id}, {likes: sauce.likes + 1, $push: {usersLiked: req.auth.userId}})
             .then(() => res.status(200).json({message: "Sauce likée !"}))
             .catch(error => res.status(500).json({error}))
         }
         //like == -1 : an user is disliking a sauce
         else if (req.body.like == -1) {
-            Sauce.updateOne({ _id: req.params.id}, {dislikes: sauce.dislikes + 1, $push: {usersDisliked: req.body.userId}})
+            Sauce.updateOne({ _id: req.params.id}, {dislikes: sauce.dislikes + 1, $push: {usersDisliked: req.auth.userId}})
             .then(() => res.status(200).json({message: "Sauce dislikée !"}))
             .catch(error => res.status(500).json({error}))
         }
         //like == 0 : an user is removing his like or dislike from a sauce
         else if (req.body.like == 0) {
             //if the action is to remove a like
-            if (sauce.usersLiked.includes(req.body.userId)) {
-                Sauce.updateOne({ _id: req.params.id}, {likes: sauce.likes - 1, $pullAll: {usersLiked: [req.body.userId]}})
+            if (sauce.usersLiked.includes(req.auth.userId)) {
+                Sauce.updateOne({ _id: req.params.id}, {likes: sauce.likes - 1, $pullAll: {usersLiked: [req.auth.userId]}})
                 .then(() => res.status(200).json({message: "Like retiré !"}))
                 .catch(error => res.status(500).json({error}))
             } 
             //if the action is to remove a dislike
-            else if (sauce.usersDisliked.includes(req.body.userId)) {
-                Sauce.updateOne({ _id: req.params.id}, {dislikes: sauce.dislikes - 1, $pullAll: {usersDisliked: [req.body.userId]}})
+            else if (sauce.usersDisliked.includes(req.auth.userId)) {
+                Sauce.updateOne({ _id: req.params.id}, {dislikes: sauce.dislikes - 1, $pullAll: {usersDisliked: [req.auth.userId]}})
                 .then(() => res.status(200).json({message: "Dislike retiré !"}))
                 .catch(error => res.status(500).json({error}))
             }
@@ -102,3 +102,9 @@ exports.manageLike = (req, res, next) => {
     })
     .catch(error => res.status(500).json({error}))
 }
+
+//une ligne if pour voir si dans un des deux
+
+    //si dans un des deux : dans like ? {enlever de like} : {enlever de dislike}
+
+//Si dans aucun ou suite de la ligne if au-dessus : le mettre au bon endroit.
