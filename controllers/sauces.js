@@ -18,6 +18,7 @@ exports.getOneSauce = (req, res, next) => {
 
 //Create one sauce in the Data Base
 exports.createOneSauce = (req, res, next) => {
+    //With the add of an image file, the request object is now a string. Thus, we need first to Parse it.
     const sauceObject = JSON.parse(req.body.sauce);
     delete sauceObject.userId;
     const sauce = new Sauce({
@@ -32,10 +33,12 @@ exports.createOneSauce = (req, res, next) => {
 
 //Modify one sauce of the Data Base
 exports.modifyOneSauce = (req, res, next) => {
+    //Verify if there is a file in the request
     const sauceObject = req.file ? {
         ...JSON.parse(req.body.sauce),
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     } : {...req.body};
+    //Avoid a security problem where the userId of a sauce is modify
     delete sauceObject.userId;
     Sauce.findOne({_id: req.params.id})
     .then(sauce => {
@@ -104,13 +107,13 @@ exports.manageLike = (req, res, next) => {
         else if (req.body.like == 0) {
             //if the action is to remove a like
             if (sauce.usersLiked.includes(req.auth.userId)) {
-                Sauce.updateOne({ _id: req.params.id}, {likes: sauce.likes - 1, $pullAll: {usersLiked: [req.auth.userId]}})
+                Sauce.updateOne({ _id: req.params.id}, {$inc: {likes: -1}, $pullAll: {usersLiked: [req.auth.userId]}})
                 .then(() => res.status(200).json({message: "Like retiré !"}))
                 .catch(error => res.status(500).json({error}))
             } 
             //if the action is to remove a dislike
             else if (sauce.usersDisliked.includes(req.auth.userId)) {
-                Sauce.updateOne({ _id: req.params.id}, {dislikes: sauce.dislikes - 1, $pullAll: {usersDisliked: [req.auth.userId]}})
+                Sauce.updateOne({ _id: req.params.id}, {$inc: {dislikes: -1}, $pullAll: {usersDisliked: [req.auth.userId]}})
                 .then(() => res.status(200).json({message: "Dislike retiré !"}))
                 .catch(error => res.status(500).json({error}))
             }
