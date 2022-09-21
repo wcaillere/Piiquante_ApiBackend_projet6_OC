@@ -4,7 +4,7 @@
 
 ### Installation du backend ###
 
-Depuis le dossier "backend", lancer `npm install`. Le serveur pourra ensuite être démarré en lançant `nodemon server`.
+Depuis le dossier "backend", lancer `npm install` pour créer le dossier node_modules. Le serveur pourra ensuite être démarré en lançant `nodemon server`.
 
 ### BD MongoDB ###
 
