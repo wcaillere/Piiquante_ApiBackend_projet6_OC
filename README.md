@@ -8,7 +8,7 @@ Depuis le dossier "backend", lancer `npm install`. Le serveur pourra ensuite êt
 
 ### BD MongoDB ###
 
-Pour des raisons de sécurité, les variables d'environnement "DB_USER", "DB_PASSWORD" et "DB_NAME" se sont pas renseignées dans le fichier .env. il suffit de les remplir avec les données de votre propre base de données MongoDB pour que le "mongoose.connect" du fichier app.js puisse fonctionner et se connecter à la base de donnée choisie.
+Pour des raisons de sécurité, le véritable fichier .env n'est pas disponible ici. Pour faire fonctionner la base de données, renommez le fichier `.env.exemple` en `.env`, et remplissez les variables avec les données de votre propre base de données MongoDB pour que le "mongoose.connect" du fichier app.js puisse fonctionner et se connecter à la base de donnée choisie. Choisissez également une Token_key sécurisée pour votre projet. 
 
 ### Lancement du serveur ###
 
