@@ -12,4 +12,4 @@ Pour des raisons de sécurité, le véritable fichier .env n'est pas disponible 
 
 ### Lancement du serveur ###
 
-Si le lancement du server avec `nodemon server` se passe bien, les messages "Listening on port 3000" et "Connexion à MongoDB réussie !" s'afficheront dans la console. 
+Si le lancement du server avec `nodemon server` se passe bien, les messages "Connexion à MongoDB réussie !" et "Listening on port 3000" s'afficheront dans la console. 
