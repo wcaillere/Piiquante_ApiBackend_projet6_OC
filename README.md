@@ -1,5 +1,6 @@
 # Backend API Piiquante #
 
+Réalisation d'une API sécurisée pour "Piiquante", une application fictive d'avis gastronomiques.
 (le frontend de l'application est disponible sur ce lien https://github.com/OpenClassrooms-Student-Center/Web-Developer-P6)
 
 ### Installation du backend ###
